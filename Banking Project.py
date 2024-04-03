@@ -1,3 +1,14 @@
+import mysql.connector
+connection = mysql.connector.connect(user = 'root', database = 'account_schema', password = 'Slimyship41$')
+
+sampleQuery = ('SELECT * FROM account_schema.Workers;')
+cursor = connection.cursor()
+cursor.execute(sampleQuery)
+for row in cursor:
+    print(row)
+
+connection.close()
+
 name = input("Enter your Username: ")
 password = input("Enter your Password: ")
 
