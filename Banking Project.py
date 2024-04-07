@@ -1,29 +1,66 @@
-import mysql.connector
-connection = mysql.connector.connect(user = 'root', database = 'account_schema', password = 'Slimyship41$')
+import BankingProjectFunctions
+import db_connection
+import sys
+
+connection = db_connection.get_connection()
+cursor = connection.cursor()
 
 name = input("Enter your Username: ")
 password = input("Enter your Password: ")
 
-print(f'''\nHello {name}!
+Query1 = "SELECT * FROM bankAccounts WHERE UserName = %s;"
+cursor.execute(Query1, (name,))
+result1 = cursor.fetchone()
+
+Query2 = "SELECT * FROM bankAccounts WHERE Password = %s"
+cursor.execute(Query2, (password,))
+result2 = cursor.fetchone()
+
+if result1 and result2:
+    print(f'''\nHello {name}!
 Welcome to Our Bank.\n''')
+    userChoice = BankingProjectFunctions.intro()
+    
+else:
+    newAccount = input("That account does not exist. Would you like to create a new account with us (Yes/No)? ")
+    if newAccount == 'Yes':
+        BankingProjectFunctions.createAccount()
+    elif newAccount == 'No':
+        sys.exit("Thank you for using This Bank. Hope you come again!")
+    else:
+        sys.exit('That is not a valid choice.')
 
-userChoice = int(input('''What would you like to do today?
-                       
-1. Check Balance
-2. Deposit Money
-3. Withdraw Money
-4. Create New Account
-5. Delete Account
-6. Change Username or Password
 
-Enter choice here: '''))
+   
 
+if userChoice == 0:
+    
+    if name == "AdminUser" and password == "AdminPass":
+        adminChoice = input("You are an admin. Would you like to see the data (Yes/No)? ")
+        if adminChoice == "Yes":
+            query = "SELECT * FROM account_schema.bankAccounts;"
+            cursor.execute(query)
+            for row in cursor:
+                print(row)
+        else:
+            print("OK")
+            BankingProjectFunctions.intro()
+    else:
+        print("You are not an admin.")
+        BankingProjectFunctions.intro()
 
-cursor = connection.cursor()
-cursor.execute("INSERT INTO bankAccounts (UserName, Password, Balance) VALUES ('%s', '%s', %s);" % (name, password, 0))
-cursor.execute("SELECT * FROM bankAccounts;")
-for row in cursor:
-    print(row)
+# elif userChoice == 1:
+#     BankingProjectFunctions.getBalance()
+
+elif userChoice == 4:
+    BankingProjectFunctions.createAccount()
+    
+elif userChoice == 5:
+    BankingProjectFunctions.deleteAccount(name, password)
+    
+elif userChoice == 7:
+    sys.exit("Thank you for using Our Bank. Come again soon!")
+
 
 connection.commit()
 cursor.close()
