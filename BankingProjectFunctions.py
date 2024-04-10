@@ -5,7 +5,7 @@ cursor = connection.cursor()
 
 def intro():    
     global userChoice
-    userChoice = int(input('''What would you like to do today?
+    userChoice = int(input('''\nWhat would you like to do today?
                                                     
 1. Check Balance
 2. Deposit Money
@@ -19,8 +19,7 @@ Enter choice here: '''))
     
     return userChoice 
 
-def getBalance():
-    cursor = connection.cursor()
+def getBalance(name):
     query = "SELECT Balance FROM bankAccounts WHERE UserName = %s"
     cursor.execute(query, (name,))
     result = cursor.fetchone()
@@ -37,12 +36,15 @@ def createAccount():
     query = "INSERT INTO bankAccounts (UserName, Password, Balance) VALUES (%s, %s, 0)"
     cursor.execute(query, (newAccountUser, newAccountPass))
     
+    connection.commit()
+    cursor.close()
+    connection.close()
+    
 def deleteAccount(name, password):
     if input('Are you sure you want to do this?\n Type "YES" to delete account: ') == "YES":
       query = "DELETE FROM bankAccounts WHERE UserName = %s AND Password = %s"
       cursor.execute(query, (name, password))
-
-
-connection.commit()
-cursor.close()
-connection.close()  
+      
+    connection.commit()
+    cursor.close()
+    connection.close()

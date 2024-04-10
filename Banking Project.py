@@ -18,7 +18,8 @@ result2 = cursor.fetchone()
 
 if result1 and result2:
     print(f'''\nHello {name}!
-Welcome to Our Bank.\n''')
+Welcome to Our Bank.''')
+    global userChoice
     userChoice = BankingProjectFunctions.intro()
     
 else:
@@ -29,9 +30,6 @@ else:
         sys.exit("Thank you for using This Bank. Hope you come again!")
     else:
         sys.exit('That is not a valid choice.')
-
-
-   
 
 if userChoice == 0:
     
@@ -49,14 +47,17 @@ if userChoice == 0:
         print("You are not an admin.")
         BankingProjectFunctions.intro()
 
-# elif userChoice == 1:
-#     BankingProjectFunctions.getBalance()
+elif userChoice == 1:
+    print(f'Your account balance is currently: {BankingProjectFunctions.getBalance(name)}')
+    BankingProjectFunctions.intro()
 
 elif userChoice == 4:
     BankingProjectFunctions.createAccount()
+    BankingProjectFunctions.intro()
     
 elif userChoice == 5:
     BankingProjectFunctions.deleteAccount(name, password)
+    BankingProjectFunctions.intro()
     
 elif userChoice == 7:
     sys.exit("Thank you for using Our Bank. Come again soon!")
