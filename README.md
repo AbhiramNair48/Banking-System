@@ -1,2 +1,2 @@
 # Elite-102
-This is my repository for Elite 102.
+Basic banking project with a CLI UI and SQL backend.
