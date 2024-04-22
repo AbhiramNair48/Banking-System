@@ -1,3 +1,4 @@
+#Used to easily import SQL server connection to other files.
 import mysql.connector
 
 def get_connection():

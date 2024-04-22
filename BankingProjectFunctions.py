@@ -4,6 +4,7 @@ import sys
 connection = db_connection.get_connection()
 cursor = connection.cursor()
 
+#Prints out the Selection screen and takes user input
 def intro():
     global userChoice
     userChoice = int(input('''\nWhat would you like to do today?
@@ -20,6 +21,7 @@ Enter choice here: '''))
     
     return userChoice 
 
+#returns user's account balance
 def getBalance(name):
     query = "SELECT Balance FROM bankAccounts WHERE UserName = %s"
     cursor.execute(query, (name,))
@@ -29,6 +31,7 @@ def getBalance(name):
     else:
         return None
 
+#adds a user inputted value to the user's balance
 def deposit(name):
     while True:
         try:
@@ -45,7 +48,8 @@ def deposit(name):
     print(f"Successfully deposited {deposit_amount}.")
     
     connection.commit()
-    
+
+#subtracts a user inputted value from the user's balance    
 def withdraw(name):
     while True:
         try:
@@ -63,7 +67,8 @@ def withdraw(name):
 
     
     connection.commit()
-    
+
+#creates a new account    
 def createAccount():
 
     newAccountUser= input("Enter Account Username: ")
@@ -74,7 +79,7 @@ def createAccount():
     
     connection.commit()
 
-    
+#deletes the user's account from the database    
 def deleteAccount(name, password):
     if input('Are you sure you want to do this?\n Type "YES" to delete account: ') == "YES":
       query = "DELETE FROM bankAccounts WHERE UserName = %s AND Password = %s"
@@ -85,7 +90,8 @@ def deleteAccount(name, password):
         print("Ok, your account will remain active.")
       
     connection.commit()
-    
+
+#changes the user's username and password    
 def changeCredentials(name):
     
     new_username = input("Enter new username (Enter current username if you do not want to change it): ")

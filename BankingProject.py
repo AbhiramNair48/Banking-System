@@ -2,13 +2,15 @@ import BankingProjectFunctions
 import db_connection
 import sys
 
+#connects to the database
 connection = db_connection.get_connection()
 cursor = connection.cursor()
 
-
+#asks for the user's username and password and saves it
 name = input("Enter your Username: ")
 password = input("Enter your Password: ")
 
+#searches the database for the user
 Query1 = "SELECT * FROM bankAccounts WHERE UserName = %s;"
 cursor.execute(Query1, (name,))
 result1 = cursor.fetchone()
@@ -17,6 +19,7 @@ Query2 = "SELECT * FROM bankAccounts WHERE Password = %s"
 cursor.execute(Query2, (password,))
 result2 = cursor.fetchone()
 
+#welcomes the user if the username and password match to an account in the database.
 if result1 and result2:
     print(f'''\nHello {name}!
 Welcome to Our Bank.''')
@@ -24,6 +27,7 @@ Welcome to Our Bank.''')
 
     while True:
         
+        #if the user is an admin, allows them to use an admin command that prints the list of users
         if userChoice == 0:
             
             if name == "AdminUser" and password == "AdminPass":
@@ -38,6 +42,7 @@ Welcome to Our Bank.''')
             else:
                 print("You are not an admin.")
 
+        #all the functions of the bank
         elif userChoice == 1:
             print(f'Your account balance is currently: {BankingProjectFunctions.getBalance(name)}')
             
@@ -66,6 +71,7 @@ Welcome to Our Bank.''')
 
         connection.commit()
 
+#asks the user if they want to create a new account if their account doesn't exist
 else:
     newAccount = input("That account does not exist. Would you like to create a new account with us (Yes/No)? ")
     if newAccount == 'Yes':
